@@ -7,3 +7,9 @@ export const getRawData = async (url: string) => {
 			return data;
 		});
 };
+
+export const formatDateWithoutTimezone = (input: string): Date => {
+    const dateWithTimezone = new Date(input);
+	const timezoneOffset = dateWithTimezone.getTimezoneOffset() * 60000;
+    return new Date((dateWithTimezone as any) - timezoneOffset);
+}

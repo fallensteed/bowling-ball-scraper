@@ -1,4 +1,5 @@
 import { BallModel } from "./common/interfaces.js";
+import { getMotiveBallList } from "./motiv/functions.js";
 import {
 	getStormBallList,
 	getRGBallList,
@@ -18,8 +19,14 @@ const getBallList = async () => {
 	const globalBalls = await getGlobalBallList();
 	globalBalls.forEach((ball) => ballList.push(ball));
 	console.log("completed 900 global");
+	const motivBalls = await getMotiveBallList();
+	motivBalls.forEach((ball) => ballList.push(ball));
+	console.log("completed motiv");
 	console.log("run complete!");
-	console.log(ballList);
+	console.log(ballList[0]);
+	console.log(ballList[15]);
+	console.log(ballList[30]);
+	console.log(ballList[45]);
 };
 
-getBallList(); 
+getBallList();

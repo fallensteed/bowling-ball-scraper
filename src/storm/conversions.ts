@@ -1,8 +1,8 @@
 import * as cheerio from "cheerio";
-import { getRawData } from "../common/functions.js";
+import { formatDateWithoutTimezone, getRawData } from "../common/functions.js";
 import { BallModel, CoreType, CoverType } from "../common/interfaces.js";
 import { stormURL } from "./urls.js";
-import { BallSpecs } from './../common/interfaces';
+import { BallSpecs } from "./../common/interfaces";
 
 export const getStormBallDetails = async (
 	ball: BallModel
@@ -35,9 +35,7 @@ export const getStormBallDetails = async (
 		let releaseDate;
 		if (rawDate) {
 			const processedDate_1 = rawDate.replace(/th|st|nd|rd/gi, "");
-			const dateWithTimezone = new Date(processedDate_1);
-			const timezoneOffset = dateWithTimezone.getTimezoneOffset() * 60000;
-			releaseDate = new Date((dateWithTimezone as any) - timezoneOffset);
+			releaseDate = formatDateWithoutTimezone(processedDate_1);
 		}
 		const companyBallIdRaw = $(
 			".product-detail .span4 .ejs-product-attributes > .attribute-title"
@@ -73,23 +71,47 @@ export const getStormBallDetails = async (
 		const coverType = coverAnalyzed[1];
 
 		let weightLi = $("#weightblocks li");
-        let specNumber = $("#weightblocks li .spec-number")
-        let h6 = $("#weightblocks li h6")
 		const specs: BallSpecs[] = [];
-        let count = 0;
-        do {
-            const weight = parseInt(weightLi.attr("data-weight") as string);
-            // console.log("weight children next first", weightLi.children().next().first().next().next().text())
-            const rg = parseFloat(weightLi.children().next().first().next().next().next().text());
-            const diff = parseFloat(weightLi.children().next().first().next().next().next().next().next().text());
-            let psa = null;
-            if (weightLi.html()?.match(/psa/gi)) {
-                psa = parseFloat(weightLi.children().next().first().next().next().next().next().next().next().next().text());
-            }
-            specs.push({ weight: weight, rg: rg, diff: diff, psa: psa });
-            weightLi = weightLi.next();
-            count++;
-        } while (weightLi.html())
+		let count = 0;
+		do {
+			const weight = parseInt(weightLi.attr("data-weight") as string);
+			// console.log("weight children next first", weightLi.children().next().first().next().next().text())
+			const rg = parseFloat(
+				weightLi.children().next().first().next().next().next().text()
+			);
+			const diff = parseFloat(
+				weightLi
+					.children()
+					.next()
+					.first()
+					.next()
+					.next()
+					.next()
+					.next()
+					.next()
+					.text()
+			);
+			let intDiff = null;
+			if (weightLi.html()?.match(/psa/gi)) {
+				intDiff = parseFloat(
+					weightLi
+						.children()
+						.next()
+						.first()
+						.next()
+						.next()
+						.next()
+						.next()
+						.next()
+						.next()
+						.next()
+						.text()
+				);
+			}
+			specs.push({ weight: weight, rg: rg, diff: diff, intDiff: intDiff });
+			weightLi = weightLi.next();
+			count++;
+		} while (weightLi.html());
 
 		// console.log(weightblocks)
 		ball.imageUrl = imageURL;
@@ -102,7 +124,7 @@ export const getStormBallDetails = async (
 		ball.coreType = coreType;
 		ball.coverName = coverName;
 		ball.coverType = coverType;
-        ball.specs = specs
+		ball.specs = specs;
 		return ball;
 	} else {
 		return ball;

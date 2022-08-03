@@ -7,13 +7,17 @@ export type CoverType =
 	| "hybrid reactive"
 	| "pearl reactive"
 	| "pearl polyester"
+    | "pearl microcell"
+    | "hybrid microcell"
+    | "solid microcell"
+    | "polyurethane"
 	| "other";
 
 export interface BallSpecs {
-    weight: number;
-    rg: number;
-    diff: number;
-    psa: number | null;
+	weight: number;
+	rg: number;
+	diff: number;
+	intDiff: number | null;
 }
 
 export interface BallModel {
