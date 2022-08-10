@@ -26,7 +26,6 @@ export const getHammereBallList = async () => {
 				companyName: "Hammer",
 				url: ballURL,
 			});
-	
 	});
 	
 	for (let i = 0; i < hammerBallList.length; i++) {
