@@ -25,7 +25,7 @@ const getBallList = async () => {
 	// console.log("completed motiv");
 	const hammerBalls = await getHammereBallList();
 	hammerBalls.forEach((ball) => ballList.push(ball));
-	console.log("completed motiv");
+	console.log("completed hammer");
 	console.log("run complete!");
 	console.log(ballList);
 };

@@ -3,29 +3,34 @@ import pretty from "pretty";
 import { BallModel } from "../common/interfaces.js";
 import { hammerBallsURL, hammerURL } from "./urls.js";
 import { getRawData } from "../common/functions.js";
+import { prototype } from "events";
+import { getHammerBallDetails } from "./conversions.js";
 // import {  } from "./conversions.js";
 
 export const getHammereBallList = async () => {
 	const hammerBallListRawData = await getRawData(hammerBallsURL);
 	const $ = cheerio.load(hammerBallListRawData);
-	const collection = $(".grid--collection grid-product");
+	const collection = $(".grid--collection .grid__item");
 	const hammerBallList: BallModel[] = [];
 	collection.each((i, el) => {
-        console.log(el.name)
-		const ballName = pretty(
-			$(".grid-product__meta grid-product__title", el).text()
+		let ballName = pretty($(".grid-product__title", el).text());
+		ballName = ballName.replace(/™/, "");
+		const ballURLElements = $(
+			".grid-product__content > .grid-product__link",
+			el
 		);
-        console.log(ballName)
-		if (ballName)
-			hammerBallList.push({ name: ballName, companyName: "Hammer" });
+		const ballURL = hammerURL + ballURLElements.attr("href");
+		if (ballName && ballURL)
+			hammerBallList.push({
+				name: ballName,
+				companyName: "Hammer",
+				url: ballURL,
+			});
+	
 	});
-	// collection.each((i, el) => {
-	// 	const ballUrl = $(".grid-product__link", el).first().prop("href");
-    //     console.log(ballUrl)
-	// 	hammerBallList[i].url = hammerURL + ballUrl;
-	// });
-	// for (let i = 0; i < hammerBallList.length; i++) {
-	// 	hammerBallList[i] = await gethammerBallDetails(hammerBallList[i]);
-	// }
+	
+	for (let i = 0; i < hammerBallList.length; i++) {
+		hammerBallList[i] = await getHammerBallDetails(hammerBallList[i]);
+	}
 	return hammerBallList;
 };
