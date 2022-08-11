@@ -62,7 +62,7 @@ export const getHammerBallDetails = async (
 			}
 		});
 
-        const specs: BallSpecs[] = []
+		const specs: BallSpecs[] = [];
 		const specsEl = $(".spec-weights li");
 		specsEl.each((i, el) => {
 			const text = $(el).text();
@@ -80,15 +80,14 @@ export const getHammerBallDetails = async (
 				const asy = text.substring(asyStart + 1, asyEnd);
 				intDiff = parseFloat(asy);
 			}
-            specs.push({
-                weight: weight,
-                rg: rg,
-                diff: diff,
-                intDiff: intDiff
-            })
+			specs.push({
+				weight: weight,
+				rg: rg,
+				diff: diff,
+				intDiff: intDiff,
+			});
 		});
-        ball.specs = specs
-		
+		ball.specs = specs;
 	}
 	return ball;
 };
