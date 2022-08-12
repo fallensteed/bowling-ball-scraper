@@ -8,6 +8,7 @@ export const getHammerBallDetails = async (
 	ball: BallModel
 ): Promise<BallModel> => {
 	if (ball.url) {
+        console.log("Ball Name:", ball.name)
 		const hammerBallDetailRawData = await getRawData(ball.url);
 		const $ = cheerio.load(hammerBallDetailRawData);
 
@@ -29,18 +30,24 @@ export const getHammerBallDetails = async (
 			const strongText = $("strong", el).text();
 			const spanText = $("span", el).text();
 			if (strongText.match(/part number/gi)) {
+                console.log("strongText:", strongText)
+                console.log("spanText:", spanText)
 				ball.companyBallId = spanText.trim();
 			} else if (strongText.match(/color/gi)) {
 				ball.color = spanText.trim();
 			} else if (strongText.match(/coverstock/gi)) {
 				ball.coverName = spanText.trim();
 			} else if (strongText.match(/core type/gi)) {
+                console.log("strongText:", strongText)
+                console.log("spanText:", spanText)
 				ball.coreType = spanText.trim().match(/asymmetric/gi)
 					? "asymmetrical"
 					: "symmetrical";
 			} else if (strongText.match(/core/gi)) {
 				ball.coreName = spanText.trim();
 			} else if (strongText.match(/cover type/gi)) {
+                console.log("strongText:", strongText)
+                console.log("spanText:", spanText)
 				switch (spanText.trim()) {
 					case "Pearl Reactive":
 						ball.coverType = "pearl reactive";
