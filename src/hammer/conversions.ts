@@ -8,7 +8,6 @@ export const getHammerBallDetails = async (
 	ball: BallModel
 ): Promise<BallModel> => {
 	if (ball.url) {
-        console.log("Ball Name:", ball.name)
 		const hammerBallDetailRawData = await getRawData(ball.url);
 		const $ = cheerio.load(hammerBallDetailRawData);
 
@@ -29,40 +28,36 @@ export const getHammerBallDetails = async (
 		descriptions.each((i, el) => {
 			const strongText = $("strong", el).text();
 			const spanText = $("span", el).text();
+			const elText = $(el).text().split(/\s/);
 			if (strongText.match(/part number/gi)) {
-                console.log("strongText:", strongText)
-                console.log("spanText:", spanText)
-				ball.companyBallId = spanText.trim();
+				ball.companyBallId = elText[3].trim();
 			} else if (strongText.match(/color/gi)) {
 				ball.color = spanText.trim();
 			} else if (strongText.match(/coverstock/gi)) {
-				ball.coverName = spanText.trim();
+				ball.coverName = elText.slice(2).join(" ");
 			} else if (strongText.match(/core type/gi)) {
-                console.log("strongText:", strongText)
-                console.log("spanText:", spanText)
-				ball.coreType = spanText.trim().match(/asymmetric/gi)
+				ball.coreType = elText[3].trim().match(/asymmetric/gi)
 					? "asymmetrical"
 					: "symmetrical";
 			} else if (strongText.match(/core/gi)) {
 				ball.coreName = spanText.trim();
 			} else if (strongText.match(/cover type/gi)) {
-                console.log("strongText:", strongText)
-                console.log("spanText:", spanText)
-				switch (spanText.trim()) {
-					case "Pearl Reactive":
-						ball.coverType = "pearl reactive";
-					case "Hybrid Reactive":
-						ball.coverType = "hybrid reactive";
-					case "Solid Reactive":
-						ball.coverType = "solid reactive";
-					case "Pearl Urethane":
-						ball.coverType = "pearl urethane";
-					case "Solid Urethane":
-						ball.coverType = "solid urethane";
-					case "Polyester":
-						ball.coverType = "polyurethane";
-					default:
-						ball.coverType = "other";
+				const selectedText = elText.slice(3);
+				const joinedSelectedText = selectedText.join(" ").trim();
+				if (joinedSelectedText.match(/pearl reactive/gi)) {
+					ball.coverType = "pearl reactive";
+				} else if (joinedSelectedText.match(/hybrid reactive/gi)) {
+					ball.coverType = "hybrid reactive";
+				} else if (joinedSelectedText.match(/solid reactive/gi)) {
+					ball.coverType = "solid reactive";
+				} else if (joinedSelectedText.match(/pearl urethane/gi)) {
+					ball.coverType = "pearl urethane";
+				} else if (joinedSelectedText.match(/solid urethane/gi)) {
+					ball.coverType = "solid urethane";
+				} else if (joinedSelectedText.match(/polyester/gi)) {
+					ball.coverType = "polyurethane";
+				} else {
+					ball.coverType = "other";
 				}
 			} else if (strongText.match(/finish/gi)) {
 				ball.factoryFinish = spanText.trim();
