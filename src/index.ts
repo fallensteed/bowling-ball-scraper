@@ -27,11 +27,14 @@ const getBallList = async () => {
 	hammerBalls.forEach((ball) => ballList.push(ball));
 	console.log("completed hammer");
 	console.log("run complete!");
+    console.log("Balls Acquired:", ballList.length)
 	console.log(ballList[0]);
 	console.log(ballList[10]);
 	console.log(ballList[20]);
 	console.log(ballList[30]);
 	console.log(ballList[40]);
+	console.log(ballList[50]);
+	console.log(ballList[60]);
 };
 
 getBallList();

@@ -169,45 +169,40 @@ export const stormDetectCoreType = (raw: string): CoreType => {
 
 export const stormDetectCover = (raw: string): [string, CoverType] => {
 	let coverName = "";
-	let coverType = "";
+	let coverType: CoverType = "other";
 	const srcWithoutPng = raw.split(".")[0];
-	const cover = srcWithoutPng.split("cover_")[1];
-	coverName =
-		cover.split("_")[0] !== "RG"
-			? cover.split("_")[0]
-			: cover.split("_")[1];
-	coverType =
-		cover.split("_")[0] !== "RG"
-			? cover.split("_")[1]
-			: cover.split("_")[2];
-	switch (coverName) {
-		case "controll":
-			coverName = "Controll Urethane";
-		case "r2x":
-			coverName = "R2X";
-		case "nex":
-			coverName = "NeX";
-		case "r3s":
-			coverName = "R3S";
-		case "r2s":
-			coverName = "R2S";
-		case "u1s":
-			coverName = "U1S";
-		case "reactor":
-			coverName = "Reactor";
-		case "poly":
-			coverName = "Polyester";
-	}
-	if (coverType === "p" || coverType === "P") {
+    const details = srcWithoutPng.split("_")
+    let rgAdd = 0;
+    if (srcWithoutPng.includes("RG")) rgAdd = 1
+    const coverNameRaw = details[2 + rgAdd]
+    const coverTypeShort = details[3 + rgAdd]
+	if (coverNameRaw.match(/controll/gi)) {
+        coverName = "Controll Urethane";
+    } else if (coverNameRaw.match(/nex/gi)) {
+        coverName = "NeX"
+    } else if (coverNameRaw.match(/rex/gi)) {
+        coverName = "ReX"
+    } else if (coverNameRaw.match(/etrax/gi)) {
+        coverName = "eTrax"
+    } else if (coverNameRaw.match(/extremetrax/gi)) {
+        coverName = "XtremeTrax"
+    } else if (coverNameRaw.match(/[a-z][0-9][a-z]/gi)) {
+        coverName = coverNameRaw.toUpperCase()
+    } else {
+        coverName = coverNameRaw[0].toUpperCase() + coverNameRaw.substring(1)
+    }
+    if (coverTypeShort === undefined || coverTypeShort.match(/poly/gi)) {
+        if (coverName.match(/clear/gi)) coverType = "polyurethane"
+    } else if (coverTypeShort.match(/p/gi)) {
 		coverType = "pearl reactive";
 		if (coverName === "U1S") coverType = "pearl urethane";
-		if (coverName === "Polyester") coverType = "pearl polyester";
-	} else if (coverType === "h" || coverType === "H") {
+		if (coverName === "Polyester") coverType = "polyurethane";
+	} else if (coverTypeShort === "h" || coverTypeShort === "H") {
 		coverType = "hybrid reactive";
 	} else {
 		coverType = "solid reactive";
 		if (coverName === "U1S") coverType = "solid urethane";
 		if (coverName === "Controll Urethane") coverType = "solid urethane";
 	}
-	return [coverName, coverType as CoverType];
+	return [coverName, coverType];
 };
