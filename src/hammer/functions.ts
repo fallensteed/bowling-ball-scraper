@@ -5,9 +5,8 @@ import { hammerBallsURL, hammerURL } from "./urls.js";
 import { getRawData } from "../common/functions.js";
 import { prototype } from "events";
 import { getHammerBallDetails } from "./conversions.js";
-// import {  } from "./conversions.js";
 
-export const getHammereBallList = async () => {
+export const getHammerBallList = async () => {
 	const hammerBallListRawData = await getRawData(hammerBallsURL);
 	const $ = cheerio.load(hammerBallListRawData);
 	const collection = $(".grid--collection .grid__item");
@@ -27,7 +26,7 @@ export const getHammereBallList = async () => {
 				url: ballURL,
 			});
 	});
-	
+
 	for (let i = 0; i < hammerBallList.length; i++) {
 		hammerBallList[i] = await getHammerBallDetails(hammerBallList[i]);
 	}
