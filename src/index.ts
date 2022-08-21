@@ -8,35 +8,39 @@ import {
 	getRGBallList,
 	getGlobalBallList,
 } from "./storm/functions.js";
+import { getTrackBallList } from "./track/functions.js";
 
 const ballList: BallModel[] = [];
 
 const getBallList = async () => {
 	console.log("...running");
-	// const stormBalls = await getStormBallList();
-	// stormBalls.forEach((ball) => ballList.push(ball));
-	// console.log("completed storm");
-	// const rgBalls = await getRGBallList();
-	// rgBalls.forEach((ball) => ballList.push(ball));
-	// console.log("completed roto grip");
-	// const globalBalls = await getGlobalBallList();
-	// globalBalls.forEach((ball) => ballList.push(ball));
-	// console.log("completed 900 global");
-	// const motivBalls = await getMotiveBallList();
-	// motivBalls.forEach((ball) => ballList.push(ball));
-	// console.log("completed motiv");
-	// const hammerBalls = await getHammerBallList();
-	// hammerBalls.forEach((ball) => ballList.push(ball));
-	// console.log("completed hammer");
-	// const eboniteBalls = await getEboniteBallList();
-	// eboniteBalls.forEach((ball) => ballList.push(ball));
-	// console.log("completed ebonite");
+	const stormBalls = await getStormBallList();
+	stormBalls.forEach((ball) => ballList.push(ball));
+	console.log("completed storm");
+	const rgBalls = await getRGBallList();
+	rgBalls.forEach((ball) => ballList.push(ball));
+	console.log("completed roto grip");
+	const globalBalls = await getGlobalBallList();
+	globalBalls.forEach((ball) => ballList.push(ball));
+	console.log("completed 900 global");
+	const motivBalls = await getMotiveBallList();
+	motivBalls.forEach((ball) => ballList.push(ball));
+	console.log("completed motiv");
+	const hammerBalls = await getHammerBallList();
+	hammerBalls.forEach((ball) => ballList.push(ball));
+	console.log("completed hammer");
+	const eboniteBalls = await getEboniteBallList();
+	eboniteBalls.forEach((ball) => ballList.push(ball));
+	console.log("completed ebonite");
 	const columbiaBalls = await getColumbiaBallList();
 	columbiaBalls.forEach((ball) => ballList.push(ball));
 	console.log("completed columbia300");
+	const trackBalls = await getTrackBallList();
+	trackBalls.forEach((ball) => ballList.push(ball));
+	console.log("completed track");
 	console.log("run complete!");
 	console.log("Balls Acquired:", ballList.length);
-	console.log(ballList);
+	// console.log(ballList);
 };
 
 getBallList();

@@ -11,7 +11,7 @@ export const getColumbiaBallDetails = async (
 	if (ball.url) {
 		const columbiaBallDetailRawData = await getRawData(ball.url);
 		const $ = cheerio.load(columbiaBallDetailRawData);
-		const specs: BallSpecs[] = [];
+		const specs: any[] = [];
 
 		// get description
 		const description = $("p.p1").text().trim();
@@ -58,35 +58,68 @@ export const getColumbiaBallDetails = async (
 			} else if (firstTd.match(/finish/gi)) {
 				ball.factoryFinish = secondTd.trim();
 			}
-            //  else if (firstTd.match(/weight/gi)) {
-		// 		if (secondTd.match(/asy/gi)) {
-		// 			ball.coreType = "asymmetrical";
-		// 		} else {
-		// 			ball.coreType = "symmetrical";
-		// 		}
-		// 	} else if (firstTd.match(/[0-9][0-9]/g)) {
-		// 		const weight = parseInt(firstTd);
-		// 		const rg = parseFloat($(el).children().first().next().text());
-		// 		const diff = parseFloat(
-		// 			$(el).children().first().next().next().text()
-		// 		);
-		// 		let intDiff = null;
-		// 		if ($(el).children().first().next().next().next().text()) {
-		// 			intDiff = parseFloat(
-		// 				$(el).children().first().next().next().next().text()
-		// 			);
-		// 			ball.coreType = "asymmetrical";
-		// 		}
-		// 		specs.push({
-		// 			weight: weight,
-		// 			rg: rg,
-		// 			diff: diff,
-		// 			intDiff: intDiff,
-		// 		});
-		// 	}
-		// 	ball.specs = specs;
 		});
-
+		ball.coreType = "symmetrical";
+		if (ball.coverType !== "polyurethane") {
+			let specTable = $("table").next();
+			do {
+				specTable = specTable.next();
+			} while (!specTable.is("table"));
+			specTable
+				.children()
+				.first()
+				.each((i, el) => {
+					const specTableRow = $("tr", el);
+					const weight: number[] = [];
+					const rg: number[] = [];
+					const diff: number[] = [];
+					let intDiff: number[] = [];
+					specTableRow.each((i, el) => {
+						let child = $(el).children().first();
+						let count = 0;
+						if (child.text().includes("RG")) {
+							child = child.next();
+							do {
+								count++;
+								rg.push(parseFloat(child.text()));
+								child = child.next();
+							} while (count < weight.length);
+						} else if (child.text().includes("DIFF")) {
+							child = child.next();
+							do {
+								count++;
+								diff.push(parseFloat(child.text()));
+								child = child.next();
+							} while (count < weight.length);
+						}
+						if (child.text().includes("ASY")) {
+							ball.coreType = "asymmetrical";
+							child = child.next();
+							do {
+								count++;
+								intDiff.push(parseFloat(child.text()));
+								child = child.next();
+							} while (count < weight.length);
+						} else if (child.text().match(/\s/)) {
+							child = child.next();
+							do {
+								weight.push(parseInt(child.text()));
+								child = child.next();
+							} while (child.text().match(/lb/gi));
+						}
+					});
+					
+                    for (let i = 0; i < weight.length; i++) {
+                        specs.push({
+                            weight: weight[i],
+                            rg: rg[i],
+                            diff: diff[i],
+                            intDiff: intDiff[i] ? intDiff[i] : null
+                        })
+                    }
+                    ball.specs = specs
+				});
+		}
 	}
 	return ball;
 };
