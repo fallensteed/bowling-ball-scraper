@@ -1,4 +1,4 @@
-export type CoreType = "symmetrical" | "asymmetrical" | "other";
+export type CoreType = "symmetrical" | "asymmetrical" | "unknown";
 
 export type CoverType =
 	| "solid urethane"
@@ -11,7 +11,7 @@ export type CoverType =
     | "hybrid microcell"
     | "solid microcell"
     | "polyurethane"
-	| "other";
+	| "unknown";
 
 export interface BallSpecs {
 	weight: number;

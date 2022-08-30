@@ -57,7 +57,7 @@ export const getHammerBallDetails = async (
 				} else if (joinedSelectedText.match(/polyester/gi)) {
 					ball.coverType = "polyurethane";
 				} else {
-					ball.coverType = "other";
+					ball.coverType = "unknown";
 				}
 			} else if (strongText.match(/finish/gi)) {
 				ball.factoryFinish = spanText.trim();

@@ -55,7 +55,7 @@ export const getEboniteBallDetails = async (
 				} else if (secondTd.match(/solid.*urethane/gi)) {
 					ball.coverType = "solid urethane";
 				} else {
-					ball.coverType = "other";
+					ball.coverType = "unknown";
 				}
 			} else if (firstTd.match(/finish/gi)) {
 				ball.factoryFinish = secondTd.trim();

@@ -9,6 +9,9 @@ import {
 	getGlobalBallList,
 } from "./storm/functions.js";
 import { getTrackBallList } from "./track/functions.js";
+import { getDV8BallList } from './dv8/functions.js';
+import { getRadicalBallList } from "./radical/functions.js";
+import { getBrunswickBallList } from "./brunswick/functions.js";
 
 const ballList: BallModel[] = [];
 
@@ -38,9 +41,18 @@ const getBallList = async () => {
 	const trackBalls = await getTrackBallList();
 	trackBalls.forEach((ball) => ballList.push(ball));
 	console.log("completed track");
+	const dv8Balls = await getDV8BallList();
+	dv8Balls.forEach((ball) => ballList.push(ball));
+	console.log("completed dv8");
+	const radicalBalls = await getRadicalBallList();
+	radicalBalls.forEach((ball) => ballList.push(ball));
+	console.log("completed radical");
+	const brunswickBalls = await getBrunswickBallList();
+	brunswickBalls.forEach((ball) => ballList.push(ball));
+	console.log("completed brunswick");
 	console.log("run complete!");
 	console.log("Balls Acquired:", ballList.length);
-	// console.log(ballList);
+	// console.log(ballList[0]);
 };
 
 getBallList();

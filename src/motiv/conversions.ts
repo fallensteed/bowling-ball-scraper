@@ -50,7 +50,7 @@ export const getMotivBallDetails = async (
         } else if (coreName.match(/symmetrical|symmetric|symmetic/ig)) {
             coreType = "symmetrical"
         } else {
-            coreType = "other"
+            coreType = "unknown"
         }
         ball.coreType = coreType
 
@@ -75,7 +75,7 @@ export const getMotivBallDetails = async (
         } else if (coverName.match(/poly/ig)) {
             coverType = "polyurethane"
         } else {
-            coverType = "other"
+            coverType = "unknown"
         }
         ball.coverType = coverType
 

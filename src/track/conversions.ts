@@ -54,7 +54,7 @@ export const getTrackBallDetails = async (
 				} else if (secondTd.match(/poly/gi)) {
 					ball.coverType = "polyurethane";
 				} else {
-					ball.coverType = "other";
+					ball.coverType = "unknown";
 				}
 			} else if (firstTd.match(/finish/gi)) {
 				ball.factoryFinish = secondTd.trim();

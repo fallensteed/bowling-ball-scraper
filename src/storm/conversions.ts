@@ -163,13 +163,13 @@ export const stormDetectCoreType = (raw: string): CoreType => {
 	} else if (raw.includes("symmetrical")) {
 		return "symmetrical";
 	} else {
-		return "other";
+		return "unknown";
 	}
 };
 
 export const stormDetectCover = (raw: string): [string, CoverType] => {
 	let coverName = "";
-	let coverType: CoverType = "other";
+	let coverType: CoverType = "unknown";
 	const srcWithoutPng = raw.split(".")[0];
     const details = srcWithoutPng.split("_")
     let rgAdd = 0;

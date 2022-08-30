@@ -3,7 +3,6 @@ import pretty from "pretty";
 import { BallModel } from "../common/interfaces.js";
 import { hammerBallsURL, hammerURL } from "./urls.js";
 import { getRawData } from "../common/functions.js";
-import { prototype } from "events";
 import { getHammerBallDetails } from "./conversions.js";
 
 export const getHammerBallList = async () => {
