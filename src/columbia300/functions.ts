@@ -26,9 +26,9 @@ export const getColumbiaBallList = async () => {
 				url: ballURL,
 			});
 	});
-	
 	for (let i = 0; i < columbiaBallList.length; i++) {
 		columbiaBallList[i] = await getColumbiaBallDetails(columbiaBallList[i]);
 	}
+	console.log(columbiaBallList);
 	return columbiaBallList;
 };

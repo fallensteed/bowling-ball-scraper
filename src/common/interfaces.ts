@@ -21,6 +21,7 @@ export interface BallSpecs {
 }
 
 export interface BallModel {
+    _id?: string;
 	name: string;
 	companyName: string;
 	url?: string;

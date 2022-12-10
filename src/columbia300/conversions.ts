@@ -108,18 +108,19 @@ export const getColumbiaBallDetails = async (
 							} while (child.text().match(/lb/gi));
 						}
 					});
-					
-                    for (let i = 0; i < weight.length; i++) {
-                        specs.push({
-                            weight: weight[i],
-                            rg: rg[i],
-                            diff: diff[i],
-                            intDiff: intDiff[i] ? intDiff[i] : null
-                        })
-                    }
-                    ball.specs = specs
+
+					for (let i = 0; i < weight.length; i++) {
+						specs.push({
+							weight: weight[i],
+							rg: rg[i],
+							diff: diff[i],
+							intDiff: intDiff[i] ? intDiff[i] : null,
+						});
+					}
+					ball.specs = specs;
 				});
 		}
 	}
+	console.log(ball);
 	return ball;
 };
