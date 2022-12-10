@@ -82,12 +82,14 @@ export const getHammerBallDetails = async (
 				const asy = text.substring(asyStart + 1, asyEnd);
 				intDiff = parseFloat(asy);
 			}
-			specs.push({
-				weight: weight,
-				rg: rg,
-				diff: diff,
-				intDiff: intDiff,
-			});
+
+			if (weight && rg && diff)
+				specs.push({
+					weight: weight,
+					rg: rg,
+					diff: diff,
+					intDiff: intDiff,
+				});
 		});
 		ball.specs = specs;
 	}

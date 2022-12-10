@@ -108,7 +108,14 @@ export const getStormBallDetails = async (
 						.text()
 				);
 			}
-			specs.push({ weight: weight, rg: rg, diff: diff, intDiff: intDiff });
+
+			if (weight && rg && diff)
+				specs.push({
+					weight: weight,
+					rg: rg,
+					diff: diff,
+					intDiff: intDiff,
+				});
 			weightLi = weightLi.next();
 			count++;
 		} while (weightLi.html());
@@ -171,29 +178,29 @@ export const stormDetectCover = (raw: string): [string, CoverType] => {
 	let coverName = "";
 	let coverType: CoverType = "unknown";
 	const srcWithoutPng = raw.split(".")[0];
-    const details = srcWithoutPng.split("_")
-    let rgAdd = 0;
-    if (srcWithoutPng.includes("RG")) rgAdd = 1
-    const coverNameRaw = details[2 + rgAdd]
-    const coverTypeShort = details[3 + rgAdd]
+	const details = srcWithoutPng.split("_");
+	let rgAdd = 0;
+	if (srcWithoutPng.includes("RG")) rgAdd = 1;
+	const coverNameRaw = details[2 + rgAdd];
+	const coverTypeShort = details[3 + rgAdd];
 	if (coverNameRaw.match(/controll/gi)) {
-        coverName = "Controll Urethane";
-    } else if (coverNameRaw.match(/nex/gi)) {
-        coverName = "NeX"
-    } else if (coverNameRaw.match(/rex/gi)) {
-        coverName = "ReX"
-    } else if (coverNameRaw.match(/etrax/gi)) {
-        coverName = "eTrax"
-    } else if (coverNameRaw.match(/extremetrax/gi)) {
-        coverName = "XtremeTrax"
-    } else if (coverNameRaw.match(/[a-z][0-9][a-z]/gi)) {
-        coverName = coverNameRaw.toUpperCase()
-    } else {
-        coverName = coverNameRaw[0].toUpperCase() + coverNameRaw.substring(1)
-    }
-    if (coverTypeShort === undefined || coverTypeShort.match(/poly/gi)) {
-        if (coverName.match(/clear/gi)) coverType = "polyurethane"
-    } else if (coverTypeShort.match(/p/gi)) {
+		coverName = "Controll Urethane";
+	} else if (coverNameRaw.match(/nex/gi)) {
+		coverName = "NeX";
+	} else if (coverNameRaw.match(/rex/gi)) {
+		coverName = "ReX";
+	} else if (coverNameRaw.match(/etrax/gi)) {
+		coverName = "eTrax";
+	} else if (coverNameRaw.match(/extremetrax/gi)) {
+		coverName = "XtremeTrax";
+	} else if (coverNameRaw.match(/[a-z][0-9][a-z]/gi)) {
+		coverName = coverNameRaw.toUpperCase();
+	} else {
+		coverName = coverNameRaw[0].toUpperCase() + coverNameRaw.substring(1);
+	}
+	if (coverTypeShort === undefined || coverTypeShort.match(/poly/gi)) {
+		if (coverName.match(/clear/gi)) coverType = "polyurethane";
+	} else if (coverTypeShort.match(/p/gi)) {
 		coverType = "pearl reactive";
 		if (coverName === "U1S") coverType = "pearl urethane";
 		if (coverName === "Polyester") coverType = "polyurethane";

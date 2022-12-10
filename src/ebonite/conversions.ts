@@ -78,12 +78,14 @@ export const getEboniteBallDetails = async (
 					);
 					ball.coreType = "asymmetrical";
 				}
-				specs.push({
-					weight: weight,
-					rg: rg,
-					diff: diff,
-					intDiff: intDiff,
-				});
+
+				if (weight && rg && diff)
+					specs.push({
+						weight: weight,
+						rg: rg,
+						diff: diff,
+						intDiff: intDiff,
+					});
 			}
 			ball.specs = specs;
 		});

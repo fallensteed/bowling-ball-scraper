@@ -8,15 +8,18 @@ import { children } from "cheerio/lib/api/traversing.js";
 export const getColumbiaBallDetails = async (
 	ball: BallModel
 ): Promise<BallModel> => {
+	console.log("ball", ball);
 	if (ball.url) {
 		const columbiaBallDetailRawData = await getRawData(ball.url);
 		const $ = cheerio.load(columbiaBallDetailRawData);
 		const specs: any[] = [];
 
 		// get description
-		const description = $("p.p1").text().trim();
+		let description = $("p.p1").text().trim();
 		if (!description.match(/specifications/i) && description !== "") {
 			ball.description = description;
+		} else {
+			return ball;
 		}
 
 		// get image url
@@ -27,7 +30,8 @@ export const getColumbiaBallDetails = async (
 		const imageURLClean = imageURLFixedWidth?.replace("//", "https://");
 		if (imageURLClean) ball.imageUrl = imageURLClean;
 
-		const specifications = $(".product-single__description table tr");
+		let specifications = $(".product-single__description table tr");
+		if (!specifications) specifications = $("table-wrapper table tr");
 		specifications.each((i, el) => {
 			const firstTd = $(el).children().first().text();
 			const secondTd = $(el).children().next().text();
@@ -59,6 +63,7 @@ export const getColumbiaBallDetails = async (
 				ball.factoryFinish = secondTd.trim();
 			}
 		});
+
 		ball.coreType = "symmetrical";
 		if (ball.coverType !== "polyurethane") {
 			let specTable = $("table").next();
@@ -110,17 +115,17 @@ export const getColumbiaBallDetails = async (
 					});
 
 					for (let i = 0; i < weight.length; i++) {
-						specs.push({
-							weight: weight[i],
-							rg: rg[i],
-							diff: diff[i],
-							intDiff: intDiff[i] ? intDiff[i] : null,
-						});
+						if (weight[i] && rg[i] && diff[i])
+							specs.push({
+								weight: weight[i],
+								rg: rg[i],
+								diff: diff[i],
+								intDiff: intDiff[i] ? intDiff[i] : null,
+							});
 					}
 					ball.specs = specs;
 				});
 		}
 	}
-	console.log(ball);
 	return ball;
 };
